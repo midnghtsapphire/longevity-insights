@@ -5,9 +5,11 @@ import {
   Settings, 
   User,
   ChevronRight,
-  Dna
+  Dna,
+  LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
 interface NavItem {
@@ -24,6 +26,15 @@ const navItems: NavItem[] = [
 ];
 
 export function Sidebar() {
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
+
+  // Get display name from user metadata or email
+  const displayName = user?.user_metadata?.display_name || user?.email?.split('@')[0] || 'User';
+
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-64 glass border-r border-border/50 flex flex-col z-50">
       {/* Logo */}
@@ -67,9 +78,18 @@ export function Sidebar() {
             <User className="w-5 h-5 text-primary-foreground" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate">Alex Johnson</p>
-            <p className="text-xs text-muted-foreground">Premium Member</p>
+            <p className="text-sm font-medium text-foreground truncate">{displayName}</p>
+            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleSignOut}
+            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            title="Sign out"
+          >
+            <LogOut className="w-4 h-4" />
+          </Button>
         </div>
       </div>
     </aside>
