@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      biomarkers: {
+        Row: {
+          created_at: string
+          id: string
+          measured_at: string
+          name: string
+          notes: string | null
+          reference_max: number | null
+          reference_min: number | null
+          unit: string
+          updated_at: string
+          user_id: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          measured_at?: string
+          name: string
+          notes?: string | null
+          reference_max?: number | null
+          reference_min?: number | null
+          unit: string
+          updated_at?: string
+          user_id: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          measured_at?: string
+          name?: string
+          notes?: string | null
+          reference_max?: number | null
+          reference_min?: number | null
+          unit?: string
+          updated_at?: string
+          user_id?: string
+          value?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
