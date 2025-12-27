@@ -99,7 +99,7 @@ const Settings = () => {
     <div className="min-h-screen bg-background">
       <Sidebar />
       
-      <main className="ml-64 p-8">
+      <main className="pl-64 p-8 min-h-screen">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-foreground">Settings</h1>

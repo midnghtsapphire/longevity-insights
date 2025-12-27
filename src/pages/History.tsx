@@ -33,6 +33,7 @@ import { useAllBiomarkers } from "@/hooks/useAllBiomarkers";
 import { AddBiomarkerModal } from "@/components/AddBiomarkerModal";
 import { EditBiomarkerModal } from "@/components/EditBiomarkerModal";
 import { DeleteBiomarkerDialog } from "@/components/DeleteBiomarkerDialog";
+import { ImportBiomarkersModal } from "@/components/ImportBiomarkersModal";
 import { exportBiomarkersToCSV } from "@/lib/exportCSV";
 import { useToast } from "@/hooks/use-toast";
 
@@ -129,7 +130,7 @@ const History = () => {
     <div className="min-h-screen bg-background">
       <Sidebar />
       
-      <main className="ml-64 p-8">
+      <main className="pl-64 p-8 min-h-screen">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -137,6 +138,7 @@ const History = () => {
             <p className="text-muted-foreground mt-1">View and filter all your biomarker readings</p>
           </div>
           <div className="flex items-center gap-3">
+            <ImportBiomarkersModal />
             <Button 
               variant="outline" 
               onClick={handleExport}

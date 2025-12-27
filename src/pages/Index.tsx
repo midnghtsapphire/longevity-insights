@@ -51,7 +51,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Sidebar />
       
-      <main className="ml-64 p-8">
+      <main className="pl-64 p-8 min-h-screen">
         <Header />
 
         {/* Biomarker Cards Grid */}
