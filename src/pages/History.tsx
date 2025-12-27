@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Filter, FlaskConical, Search, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { CalendarIcon, Download, Filter, FlaskConical, Search, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -33,13 +33,32 @@ import { useAllBiomarkers } from "@/hooks/useAllBiomarkers";
 import { AddBiomarkerModal } from "@/components/AddBiomarkerModal";
 import { EditBiomarkerModal } from "@/components/EditBiomarkerModal";
 import { DeleteBiomarkerDialog } from "@/components/DeleteBiomarkerDialog";
+import { exportBiomarkersToCSV } from "@/lib/exportCSV";
+import { useToast } from "@/hooks/use-toast";
 
 const History = () => {
   const { biomarkers, loading, uniqueNames } = useAllBiomarkers();
+  const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBiomarker, setSelectedBiomarker] = useState<string>("all");
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+
+  const handleExport = () => {
+    if (filteredBiomarkers.length === 0) {
+      toast({
+        title: "No data to export",
+        description: "Add some biomarker readings first or adjust your filters",
+        variant: "destructive",
+      });
+      return;
+    }
+    exportBiomarkersToCSV(filteredBiomarkers);
+    toast({
+      title: "Export complete",
+      description: `Exported ${filteredBiomarkers.length} biomarker readings to CSV`,
+    });
+  };
 
   // Filter biomarkers based on search, type, and date range
   const filteredBiomarkers = useMemo(() => {
@@ -117,7 +136,18 @@ const History = () => {
             <h1 className="text-2xl font-bold text-foreground">Biomarker History</h1>
             <p className="text-muted-foreground mt-1">View and filter all your biomarker readings</p>
           </div>
-          <AddBiomarkerModal />
+          <div className="flex items-center gap-3">
+            <Button 
+              variant="outline" 
+              onClick={handleExport}
+              disabled={loading || biomarkers.length === 0}
+              className="gap-2 border-border"
+            >
+              <Download className="h-4 w-4" />
+              Export CSV
+            </Button>
+            <AddBiomarkerModal />
+          </div>
         </div>
 
         {/* Filters */}
