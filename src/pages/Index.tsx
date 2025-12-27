@@ -5,6 +5,7 @@ import { BiomarkerCard } from "@/components/BiomarkerCard";
 import { DynamicTrendChart } from "@/components/DynamicTrendChart";
 import { AIInsightsPanel } from "@/components/AIInsightsPanel";
 import { HealthScore } from "@/components/HealthScore";
+import { HealthGoalsPanel } from "@/components/HealthGoalsPanel";
 import { IntegrationsPanel } from "@/components/IntegrationsPanel";
 import { AddBiomarkerModal } from "@/components/AddBiomarkerModal";
 import { useBiomarkers } from "@/hooks/useBiomarkers";
@@ -112,6 +113,11 @@ const Index = () => {
             days={30}
           />
           <HealthScore />
+        </section>
+
+        {/* Health Goals */}
+        <section className="mb-8">
+          <HealthGoalsPanel />
         </section>
 
         {/* Bottom Row */}
