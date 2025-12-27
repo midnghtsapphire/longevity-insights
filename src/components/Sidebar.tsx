@@ -1,6 +1,6 @@
 import { 
   LayoutDashboard, 
-  FileText, 
+  History,
   Watch, 
   Settings, 
   User,
@@ -8,6 +8,7 @@ import {
   Dna,
   LogOut
 } from "lucide-react";
+import { useLocation, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -15,18 +16,19 @@ import { Button } from "@/components/ui/button";
 interface NavItem {
   icon: typeof LayoutDashboard;
   label: string;
-  active?: boolean;
+  href: string;
 }
 
 const navItems: NavItem[] = [
-  { icon: LayoutDashboard, label: "Dashboard", active: true },
-  { icon: FileText, label: "Lab Results" },
-  { icon: Watch, label: "Wearables" },
-  { icon: Settings, label: "Settings" },
+  { icon: LayoutDashboard, label: "Dashboard", href: "/" },
+  { icon: History, label: "History", href: "/history" },
+  { icon: Watch, label: "Wearables", href: "/wearables" },
+  { icon: Settings, label: "Settings", href: "/settings" },
 ];
 
 export function Sidebar() {
   const { user, signOut } = useAuth();
+  const location = useLocation();
 
   const handleSignOut = async () => {
     await signOut();
@@ -52,23 +54,27 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">
-        {navItems.map((item) => (
-          <button
-            key={item.label}
-            className={cn(
-              "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200",
-              item.active
-                ? "bg-primary/10 text-primary border border-primary/20"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-            )}
-          >
-            <item.icon className="w-5 h-5" />
-            <span>{item.label}</span>
-            {item.active && (
-              <ChevronRight className="w-4 h-4 ml-auto" />
-            )}
-          </button>
-        ))}
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.href;
+          return (
+            <Link
+              key={item.label}
+              to={item.href}
+              className={cn(
+                "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200",
+                isActive
+                  ? "bg-primary/10 text-primary border border-primary/20"
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+              )}
+            >
+              <item.icon className="w-5 h-5" />
+              <span>{item.label}</span>
+              {isActive && (
+                <ChevronRight className="w-4 h-4 ml-auto" />
+              )}
+            </Link>
+          );
+        })}
       </nav>
 
       {/* User Profile */}
