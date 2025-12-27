@@ -11,7 +11,9 @@ import {
 import { useLocation, Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useProfile } from "@/hooks/useProfile";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface NavItem {
   icon: typeof LayoutDashboard;
@@ -28,14 +30,25 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const { user, signOut } = useAuth();
+  const { profile } = useProfile();
   const location = useLocation();
 
   const handleSignOut = async () => {
     await signOut();
   };
 
-  // Get display name from user metadata or email
-  const displayName = user?.user_metadata?.display_name || user?.email?.split('@')[0] || 'User';
+  // Get display name from profile, user metadata, or email
+  const displayName = profile?.display_name || user?.user_metadata?.display_name || user?.email?.split('@')[0] || 'User';
+
+  const getInitials = () => {
+    if (profile?.display_name) {
+      return profile.display_name.slice(0, 2).toUpperCase();
+    }
+    if (user?.email) {
+      return user.email.slice(0, 2).toUpperCase();
+    }
+    return "U";
+  };
 
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-64 glass border-r border-border/50 flex flex-col z-50">
@@ -80,9 +93,12 @@ export function Sidebar() {
       {/* User Profile */}
       <div className="p-4 border-t border-border/50">
         <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/30">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-            <User className="w-5 h-5 text-primary-foreground" />
-          </div>
+          <Avatar className="h-10 w-10 border border-border">
+            <AvatarImage src={profile?.avatar_url ?? undefined} alt="Profile" />
+            <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-primary-foreground text-sm">
+              {getInitials()}
+            </AvatarFallback>
+          </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-foreground truncate">{displayName}</p>
             <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
