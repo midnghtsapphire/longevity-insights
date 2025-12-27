@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { BiomarkerCard } from "@/components/BiomarkerCard";
@@ -6,14 +7,9 @@ import { AIInsightsPanel } from "@/components/AIInsightsPanel";
 import { HealthScore } from "@/components/HealthScore";
 import { IntegrationsPanel } from "@/components/IntegrationsPanel";
 import { AddBiomarkerModal } from "@/components/AddBiomarkerModal";
-
-// Sample data
-const biomarkers = [
-  { name: "hs-CRP", value: "0.8", unit: "mg/L", trend: "down" as const, status: "optimal" as const, icon: "heart" as const, change: "-12%" },
-  { name: "ApoB", value: "82", unit: "mg/dL", trend: "down" as const, status: "optimal" as const, icon: "activity" as const, change: "-8%" },
-  { name: "Fasting Glucose", value: "92", unit: "mg/dL", trend: "stable" as const, status: "optimal" as const, icon: "zap" as const, change: "0%" },
-  { name: "VO2 Max", value: "48", unit: "ml/kg/min", trend: "up" as const, status: "optimal" as const, icon: "brain" as const, change: "+5%" },
-];
+import { useBiomarkers } from "@/hooks/useBiomarkers";
+import { Skeleton } from "@/components/ui/skeleton";
+import { FlaskConical } from "lucide-react";
 
 const glucoseData = [
   { date: "Mon", value: 94 },
@@ -59,6 +55,18 @@ const insights = [
 ];
 
 const Index = () => {
+  const { biomarkers, loading, lastUpdated } = useBiomarkers();
+
+  const formatLastUpdated = () => {
+    if (!lastUpdated) return "No data yet";
+    const now = new Date();
+    const isToday = format(lastUpdated, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
+    if (isToday) {
+      return `Today, ${format(lastUpdated, "h:mm a")}`;
+    }
+    return format(lastUpdated, "MMM d, h:mm a");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Sidebar />
@@ -71,15 +79,46 @@ const Index = () => {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-foreground">Key Biomarkers</h2>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-muted-foreground">Last updated: Today, 9:42 AM</span>
+              <span className="text-sm text-muted-foreground">
+                Last updated: {formatLastUpdated()}
+              </span>
               <AddBiomarkerModal />
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-4">
-            {biomarkers.map((biomarker) => (
-              <BiomarkerCard key={biomarker.name} {...biomarker} />
-            ))}
-          </div>
+
+          {loading ? (
+            <div className="grid grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map((i) => (
+                <Skeleton key={i} className="h-32 rounded-xl" />
+              ))}
+            </div>
+          ) : biomarkers.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 px-4 rounded-xl border border-dashed border-border bg-card/50">
+              <div className="p-4 rounded-full bg-primary/10 mb-4">
+                <FlaskConical className="w-8 h-8 text-primary" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">No biomarkers yet</h3>
+              <p className="text-sm text-muted-foreground text-center max-w-sm mb-4">
+                Start tracking your health by adding your first biomarker reading. Track metrics like hs-CRP, glucose, ApoB, and more.
+              </p>
+              <AddBiomarkerModal />
+            </div>
+          ) : (
+            <div className="grid grid-cols-4 gap-4">
+              {biomarkers.slice(0, 8).map((biomarker) => (
+                <BiomarkerCard
+                  key={biomarker.id}
+                  name={biomarker.name}
+                  value={biomarker.value}
+                  unit={biomarker.unit}
+                  trend={biomarker.trend}
+                  status={biomarker.status}
+                  icon={biomarker.icon}
+                  change={biomarker.change}
+                />
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Charts and Insights Row */}
