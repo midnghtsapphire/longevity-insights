@@ -31,6 +31,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { useAllBiomarkers } from "@/hooks/useAllBiomarkers";
 import { AddBiomarkerModal } from "@/components/AddBiomarkerModal";
+import { EditBiomarkerModal } from "@/components/EditBiomarkerModal";
+import { DeleteBiomarkerDialog } from "@/components/DeleteBiomarkerDialog";
 
 const History = () => {
   const { biomarkers, loading, uniqueNames } = useAllBiomarkers();
@@ -251,6 +253,7 @@ const History = () => {
                     <TableHead className="text-muted-foreground">Status</TableHead>
                     <TableHead className="text-muted-foreground">Date</TableHead>
                     <TableHead className="text-muted-foreground">Notes</TableHead>
+                    <TableHead className="text-muted-foreground w-[100px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -280,6 +283,12 @@ const History = () => {
                       </TableCell>
                       <TableCell className="text-muted-foreground max-w-[200px] truncate">
                         {biomarker.notes || "—"}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <EditBiomarkerModal biomarker={biomarker} />
+                          <DeleteBiomarkerDialog biomarker={biomarker} />
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
