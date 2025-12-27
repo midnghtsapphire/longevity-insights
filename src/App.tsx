@@ -8,6 +8,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import History from "./pages/History";
 import Settings from "./pages/Settings";
+import Wearables from "./pages/Wearables";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -43,6 +44,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Settings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wearables"
+              element={
+                <ProtectedRoute>
+                  <Wearables />
                 </ProtectedRoute>
               }
             />
