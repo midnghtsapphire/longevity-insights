@@ -5,6 +5,7 @@ import { TrendChart } from "@/components/TrendChart";
 import { AIInsightsPanel } from "@/components/AIInsightsPanel";
 import { HealthScore } from "@/components/HealthScore";
 import { IntegrationsPanel } from "@/components/IntegrationsPanel";
+import { AddBiomarkerModal } from "@/components/AddBiomarkerModal";
 
 // Sample data
 const biomarkers = [
@@ -69,7 +70,10 @@ const Index = () => {
         <section className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-foreground">Key Biomarkers</h2>
-            <span className="text-sm text-muted-foreground">Last updated: Today, 9:42 AM</span>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground">Last updated: Today, 9:42 AM</span>
+              <AddBiomarkerModal />
+            </div>
           </div>
           <div className="grid grid-cols-4 gap-4">
             {biomarkers.map((biomarker) => (
