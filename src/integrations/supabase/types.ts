@@ -56,6 +56,39 @@ export type Database = {
         }
         Relationships: []
       }
+      health_goals: {
+        Row: {
+          biomarker_name: string
+          created_at: string
+          id: string
+          notes: string | null
+          target_max: number | null
+          target_min: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          biomarker_name: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          target_max?: number | null
+          target_min?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          biomarker_name?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          target_max?: number | null
+          target_min?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
