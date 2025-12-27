@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { Sidebar } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
 import { BiomarkerCard } from "@/components/BiomarkerCard";
-import { TrendChart } from "@/components/TrendChart";
+import { DynamicTrendChart } from "@/components/DynamicTrendChart";
 import { AIInsightsPanel } from "@/components/AIInsightsPanel";
 import { HealthScore } from "@/components/HealthScore";
 import { IntegrationsPanel } from "@/components/IntegrationsPanel";
@@ -10,26 +10,6 @@ import { AddBiomarkerModal } from "@/components/AddBiomarkerModal";
 import { useBiomarkers } from "@/hooks/useBiomarkers";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FlaskConical } from "lucide-react";
-
-const glucoseData = [
-  { date: "Mon", value: 94 },
-  { date: "Tue", value: 91 },
-  { date: "Wed", value: 96 },
-  { date: "Thu", value: 89 },
-  { date: "Fri", value: 92 },
-  { date: "Sat", value: 88 },
-  { date: "Sun", value: 90 },
-];
-
-const hrvData = [
-  { date: "Mon", value: 52 },
-  { date: "Tue", value: 48 },
-  { date: "Wed", value: 55 },
-  { date: "Thu", value: 51 },
-  { date: "Fri", value: 58 },
-  { date: "Sat", value: 62 },
-  { date: "Sun", value: 60 },
-];
 
 const insights = [
   {
@@ -123,17 +103,13 @@ const Index = () => {
 
         {/* Charts and Insights Row */}
         <section className="grid grid-cols-3 gap-6 mb-8">
-          <TrendChart
-            title="Fasting Glucose Trend"
-            data={glucoseData}
+          <DynamicTrendChart 
             color="hsl(174, 72%, 56%)"
-            unit="mg/dL"
+            days={30}
           />
-          <TrendChart
-            title="Heart Rate Variability"
-            data={hrvData}
+          <DynamicTrendChart 
             color="hsl(43, 96%, 56%)"
-            unit="ms"
+            days={30}
           />
           <HealthScore />
         </section>
